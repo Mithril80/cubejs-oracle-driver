@@ -1,12 +1,12 @@
 {
-  "name": "oracle-driver6-cubejs-driver",
+  "name": "oracle-v6-cubejs-driver",
   "description": "Cube.js oracle database driver",
   "author": "Mithril80",
   "version": "0.0.1",
   "public": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/Mithril80/oracle-driver6-cubejs-driver"
+    "url": "https://github.com/Mithril80/oracle-v6-cubejs-driver"
   },
   "engines": {
     "node": ">=10.8.0"
