@@ -2,7 +2,7 @@
   "name": "oracledb6-cubejs-driver",
   "description": "Cube.js oracle database driver",
   "author": "Mithril80",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "public": true,
   "repository": {
     "type": "git",
