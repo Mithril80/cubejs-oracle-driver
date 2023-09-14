@@ -117,7 +117,7 @@ class OracleDriver extends BaseDriver {
       let endTime = Date.now();
       let seconds = Number((endTime - startTime) / 1000).toFixed(3);
 
-      console.log(`Timeout connection setting to ${timeout}s.Get connection into ${seconds}s`);
+      console.log(`Timeout connection setting to ${timeout}s. Get connection into ${seconds}s`);
       
 
       const res = await conn.execute(query, values || {});
@@ -126,6 +126,7 @@ class OracleDriver extends BaseDriver {
       seconds = Number((endTime - startTime) / 1000).toFixed(3);
 
       console.log(`Execute query ${query} into ${seconds}s`);
+      console.log(`Parameters query: ${values}`);
       
       return res && res.rows;
     } catch (e) {
