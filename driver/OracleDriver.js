@@ -108,11 +108,11 @@ class OracleDriver extends BaseDriver {
     const startTime = Date.now();
 
     try {
-      const timeout = (process.env.CUBEJS_DB_CONNECTION_CALL_TIMEOUT || 30) * 1000;
+      const timeout = (process.env.CUBEJS_DB_CONNECTION_CALL_TIMEOUT || 30);
       console.log("Get connection driver 6")
 
       conn = await this.getConnectionFromPool();
-      conn.callTimeout = timeout;
+      conn.callTimeout = timeout * 1000;
 
       let endTime = Date.now();
       let seconds = Number((endTime - startTime) / 1000).toFixed(3);
@@ -125,6 +125,7 @@ class OracleDriver extends BaseDriver {
       endTime = Date.now();
       seconds = Number((endTime - startTime) / 1000).toFixed(3);
 
+      query = query.replace(/\s\s+/g, ' ');
       console.log(`Execute query ${query} into ${seconds}s`);
       console.log(`Parameters query: ${values}`);
       
