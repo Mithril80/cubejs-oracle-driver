@@ -58,7 +58,7 @@ class OracleFilter extends BaseFilter {
    }
 }
 
-export class OracleQuery extends BaseQuery {
+class OracleQuery extends BaseQuery {
   /**
    * "LIMIT" on Oracle it's illegal
    */
@@ -138,3 +138,5 @@ export class OracleQuery extends BaseQuery {
     return name;
   }
 }
+
+module.exports = OracleQuery
