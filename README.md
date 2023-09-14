@@ -6,13 +6,13 @@
 * cube.js
 
 ```code
-const { OracleDriver, OracleQuery } = require("oraclev6-cubejs-driver")
+const { OracleDriver, OracleQuery } = require("oracledb6-cubejs-driver")
 module.exports = {
     dialectFactory: (dataSource) => {        
         return OracleQuery
     },
     dbType: ({ dataSource } = {}) => {
-        return "oraclev6"
+        return "oracledb6"
     },
     driverFactory: ({ dataSource } = {}) => {
         return new OracleDriver({})
