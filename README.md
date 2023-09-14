@@ -12,7 +12,7 @@ module.exports = {
         return OracleQuery
     },
     dbType: ({ dataSource } = {}) => {
-        return "oracle-driver6"
+        return "oraclev6"
     },
     driverFactory: ({ dataSource } = {}) => {
         return new OracleDriver({})
