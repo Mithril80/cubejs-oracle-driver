@@ -1,6 +1,5 @@
-import { BaseQuery } from './BaseQuery';
-import { BaseFilter } from './BaseFilter';
-import { UserError } from '../compiler/UserError';
+import {UserError,BaseFilter,BaseQuery} from "@cubejs-backend/schema-compiler";
+import moment from "moment-timezone";
 
 const GRANULARITY_VALUE = {
   day: 'DD',
