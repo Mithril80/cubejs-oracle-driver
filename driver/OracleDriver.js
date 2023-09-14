@@ -2,6 +2,8 @@ const { BaseDriver } = require('@cubejs-backend/query-orchestrator');
 const oracledb = require('oracledb');
 const { reduce } = require('ramda');
 
+oracledb.fetchAsString = [ oracledb.NUMBER ]; //any number queried will be returned as string
+
 const sortByKeys = (unordered) => {
   const ordered = {};
 
@@ -55,8 +57,10 @@ class OracleDriver extends BaseDriver {
       db: process.env.CUBEJS_DB_NAME,
       host: process.env.CUBEJS_DB_HOST,
       port: process.env.CUBEJS_DB_PORT || 1521,
+      connectionString: process.env.CUBEJS_DB_CONNECTION_STRING,
+      _enableStats: (process.env.CUBEJS_DB_ENABLE_STAT === 'true') || false,
       poolMin: 0,
-      poolMax: config.maxPoolSize || 50,
+      poolMax: config.CUBEJS_DB_POOL_MAX || 50,
     };
 
     if (!this.config.connectionString) {
@@ -100,16 +104,48 @@ class OracleDriver extends BaseDriver {
   }
 
   async query(query, values) {
-    const conn = await this.getConnectionFromPool();
+    let conn;
+    const startTime = Date.now();
+
     try {
+      const timeout = (process.env.CUBEJS_DB_CONNECTION_CALL_TIMEOUT || 30) * 1000;
+      console.log("Get connection driver 6")
+
+      conn = await this.getConnectionFromPool();
+      conn.callTimeout = timeout;
+
+      let endTime = Date.now();
+      let seconds = Number((endTime - startTime) / 1000).toFixed(3);
+
+      console.log(`Timeout connection setting to ${timeout}s.Get connection into ${seconds}s`);
+      
+
       const res = await conn.execute(query, values || {});
+
+      endTime = Date.now();
+      seconds = Number((endTime - startTime) / 1000).toFixed(3);
+
+      console.log(`Execute query ${query} into ${seconds}s`);
+      
       return res && res.rows;
     } catch (e) {
+      console.log("Error during execute query");
       throw (e);
+    } finally {
+      if(conn) {
+        try {
+          console.log("Release connection");
+          await conn.close();
+        } catch (err) {
+          console.error(err);
+        }
+      }
+      this.pool._logStats();
     }
   }
 
   release() {
+    console.log("Pool closed");
     return this.pool && this.pool.close();
   }
 }
