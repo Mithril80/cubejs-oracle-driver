@@ -60,7 +60,7 @@ class OracleDriver extends BaseDriver {
       connectionString: process.env.CUBEJS_DB_CONNECTION_STRING,
       _enableStats: (process.env.CUBEJS_DB_ENABLE_STAT === 'true') || false,
       poolMin: 0,
-      poolMax: config.CUBEJS_DB_POOL_MAX || 50,
+      poolMax: (process.env.CUBEJS_DB_POOL_MAX || 50) * 1,
     };
 
     if (!this.config.connectionString) {

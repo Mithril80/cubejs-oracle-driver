@@ -15,7 +15,7 @@ module.exports = {
         return "oracledb6"
     },
     driverFactory: ({ dataSource } = {}) => {
-        return new OracleDriver({})
+        return new OracleDriver()
     }
 };
 ```
