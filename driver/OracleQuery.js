@@ -12,6 +12,9 @@ const GRANULARITY_VALUE = {
   year: 'YYYY'
 };
 
+const dateTimeLocalMsRegex = /^\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d$/;
+const dateRegex = /^\d\d\d\d-\d\d-\d\d$/;
+
 class OracleFilter extends BaseFilter {
   castParameter() {
     return ':"?"';
@@ -22,8 +25,35 @@ class OracleFilter extends BaseFilter {
    */
   likeIgnoreCase(column, not, param, type) {
     const p = (!type || type === 'contains' || type === 'ends') ? '\'%\' || ' : '';
-    const s = (!type || type === 'contains' || type === 'starts') ? ' || \'%\'' : '';
-    return `${column}${not ? ' NOT' : ''} LIKE ${p}${this.allocateParam(param)}${s}`;
+    const s = (!type || type === 'contains' || type === 'starts') ? ' || \'%\'' : '';    
+    return `UPPER(${column})${not ? ' NOT' : ''} LIKE UPPER(${p}${this.allocateCastParam(param)}${s})`;
+  }
+
+  formatFromDate(date) // Per Oracle senza i millisecondi il to_date non accetta i millisecondi
+	{
+        if (date && date.match(dateTimeLocalMsRegex)) {
+            return date;
+        }
+        if (date && date.match(dateRegex)) {
+            return `${date}T00:00:00`;
+        }
+        if (!date) {
+            return moment.tz(date, this.query.timezone).format('YYYY-MM-DDT00:00:00');
+        }
+        return moment.tz(date, this.query.timezone).format(moment.HTML5_FMT.DATETIME_LOCAL_SECONDS);
+    }
+
+	formatToDate(date) {
+        if (date && date.match(dateTimeLocalMsRegex)) {
+            return date;
+        }
+        if (date && date.match(dateRegex)) {
+            return `${date}T23:59:59`;
+        }
+        if (!date) {
+            return moment.tz(date, this.query.timezone).format('YYYY-MM-DDT23:59:59');
+        }
+        return moment.tz(date, this.query.timezone).format(moment.HTML5_FMT.DATETIME_LOCAL_SECONDS);
   }
 }
 
@@ -37,6 +67,10 @@ export class OracleQuery extends BaseQuery {
     return `${offsetClause}${limitClause}`;
   }
 
+  timestampFormat() { 
+        return 'YYYY-MM-DD[T]HH:mm:ss[Z]';
+  }
+  
   /**
    * "AS" for table aliasing on Oracle it's illegal
    */
