@@ -44,7 +44,7 @@ class OracleFilter extends BaseFilter {
         return moment.tz(date, this.query.timezone).format(moment.HTML5_FMT.DATETIME_LOCAL_SECONDS);
     }
 
-	formatToDate(date) {
+    formatToDate(date) {
         if (date && date.match(dateTimeLocalMsRegex)) {
             return date;
         }
@@ -55,7 +55,7 @@ class OracleFilter extends BaseFilter {
             return moment.tz(date, this.query.timezone).format('YYYY-MM-DDT23:59:59');
         }
         return moment.tz(date, this.query.timezone).format(moment.HTML5_FMT.DATETIME_LOCAL_SECONDS);
-  }
+   }
 }
 
 export class OracleQuery extends BaseQuery {
