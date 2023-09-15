@@ -92,7 +92,7 @@ class OracleDriver extends BaseDriver {
 
   async getConnectionFromPool() {
     if (!this.pool) {
-      this.db.initOracleClient();
+      this.db.initOracleClient({ libDir: process.env.CUBEJS_DB_ORACLE_INSTANT_CLIENT });
       this.pool = await this.db.createPool(this.config);
     }
     return this.pool.getConnection()
