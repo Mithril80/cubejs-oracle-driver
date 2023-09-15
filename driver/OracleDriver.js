@@ -92,6 +92,7 @@ class OracleDriver extends BaseDriver {
 
   async getConnectionFromPool() {
     if (!this.pool) {
+      this.db.initOracleClient();
       this.pool = await this.db.createPool(this.config);
     }
     return this.pool.getConnection()
